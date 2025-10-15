@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Feedback Submission Portal</title>
+    <style>
+        body { font-family: sans-serif; max-width: 800px; margin: auto; padding: 20px; }
+        .form-container, .feedback-list { border: 1px solid #ccc; padding: 20px; margin-bottom: 20px; border-radius: 8px; }
+        .feedback-item { border-bottom: 1px solid #eee; padding: 10px 0; }
+        input, textarea { width: 100%; padding: 8px; margin-bottom: 10px; box-sizing: border-box; }
+        button { padding: 10px 15px; background-color: #007bff; color: white; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Submit Your Feedback</h1>
+    <div class="form-container">
+        <form action="/submit" method="POST">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+            <label for="feedbackText">Feedback:</label>
+            <textarea id="feedbackText" name="feedbackText" rows="4" required></textarea>
+            <button type="submit">Submit Feedback</button>
+        </form>
+    </div>
+    <h1>Submitted Feedback</h1>
+    <div class="feedback-list">
+        <% feedbacks.forEach(function(feedback) { %>
+            <div class="feedback-item">
+                <strong><%= feedback.name %>:</strong>
+                <p><%= feedback.feedbackText %></p>
+            </div>
+        <% }); %>
+    </div>
+</body>
+</html>

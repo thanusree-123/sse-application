@@ -1,0 +1,41 @@
+# --- Node.js App Service ---
+# This Service will expose your application to the outside world.
+# 'type: NodePort' makes the app accessible via an IP and port provided by Minikube.
+apiVersion: v1
+kind: Service
+metadata:
+  name: feedback-app-service
+spec:
+  selector:
+    app: feedback-app
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+  type: NodePort
+---
+# --- Node.js App Deployment ---
+# This Deployment will manage the Pods for your feedback application.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: feedback-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: feedback-app
+  template:
+    metadata:
+      labels:
+        app: feedback-app
+    spec:
+      containers:
+        - name: feedback-app
+          image: feedback-app:1.0 # The name of the image you built
+          imagePullPolicy: Never # CRITICAL: Tells K8s to use the local Minikube image, not pull from the internet.
+          ports:
+            - containerPort: 3000
+          env:
+            - name: MONGO_URL # Environment variable to tell the app where the database is.
+              value: "mongodb://mongodb:27017/feedbackdb" # Connects to the 'mongodb' service created above.
